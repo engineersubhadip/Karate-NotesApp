@@ -10,6 +10,7 @@ function fn() {
 	if (env == 'dev') {
 		config.baseURL = 'https://practice.expandtesting.com/notes/api/';
 		config.loginEndPoint = 'users/login';
+		config.logoutEndPoint = 'users/logout';
 	} else if (env == 'qa') {
 		config.baseURL = 'https://practice.expandtesting.com/notes/api/';
 		config.loginEndPoint = 'users/login';
