@@ -1,4 +1,3 @@
-@Debug
 Feature: This feature file will contains all the scenarios related to creation of new note
 
    Background: Preconditions
@@ -12,7 +11,7 @@ Feature: This feature file will contains all the scenarios related to creation o
          }
          """
 
-
+   @Debug
    Scenario Outline: User successfully creates a new note
       * def common = karate.call('classpath:Notes_App/utils/common.js')
       * def createNewNoteURL = baseURL + createNewNoteEndPoint
@@ -29,6 +28,10 @@ Feature: This feature file will contains all the scenarios related to creation o
       When method Post
       * def expectedResponse = {responseCode : '<responseCode>'}
       Then common.validateResponse(expectedResponse)
+      Then match response.data.title == '<current_title>'
+      Then match response.data.description == '<current_description>'
+      Then match response.data.category == '<current_category>'
+
       Examples:
          | current_title | current_description | current_category | responseCode |
          | title1        | description1        | Home             | 200          |
