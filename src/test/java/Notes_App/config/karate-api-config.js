@@ -7,17 +7,12 @@ function fn() {
 	var config = {
 		env: env,
 	};
-	const apiConfig = karate.call(
-		'classpath:Notes_App/config/karate-api-config.js',
-	);
-
-	config = karate.merge(config, apiConfig);
-
 	if (env == 'dev') {
-		config.email = 'tickoo227@gmail.com';
-		config.password = 'test123';
+		config.baseURL = 'https://practice.expandtesting.com/notes/api/';
+		config.loginEndPoint = 'users/login';
 	} else if (env == 'qa') {
-		// customize
+		config.baseURL = 'https://practice.expandtesting.com/notes/api/';
+		config.loginEndPoint = 'users/login';
 	}
 	return config;
 }
