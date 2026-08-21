@@ -11,7 +11,6 @@ Feature: This feature file will contains all the scenarios related to creation o
          }
          """
 
-   @Debug
    Scenario Outline: User successfully creates a new note
       * def common = karate.call('classpath:Notes_App/utils/common.js')
       * def createNewNoteURL = baseURL + createNewNoteEndPoint
@@ -64,3 +63,25 @@ Feature: This feature file will contains all the scenarios related to creation o
          | user is trying to create a note, by passing empty category              | valid title   | valid description   |                  | 400          | Category must be one of the categories: Home, Work, Personal |
          | user is trying to create a note, by passing category having length 3    | valid title   | valid description   | val              | 400          | Category must be one of the categories: Home, Work, Personal |
          | user is trying to create a note, by passing invalid category value      | valid title   | valid description   | Laptop           | 400          | Category must be one of the categories: Home, Work, Personal |
+
+
+   Scenario Outline: Negative scenario : 401 status code check
+      * def common = karate.call('classpath:Notes_App/utils/common.js')
+      * def createNewNoteURL = baseURL + createNewNoteEndPoint
+      Given url createNewNoteURL
+      And header x-auth-token = 'invalid token id'
+      And request
+         """
+         {
+         title : '#(current_title)',
+         description : '#(current_description)',
+         category : '#(current_category)'
+         }
+         """
+      When method Post
+      * def expectedResponse = {responseCode : '<expected_status_code>', responseDescription : '<expected_description>'}
+      Then common.validateResponse(expectedResponse)
+
+      Examples:
+         | current_title | current_description | current_category | expected_status_code | expected_description                                             |
+         | Valid title   | Valid description   | Work             | 401                  | Access token is not valid or has expired, you will need to login |
